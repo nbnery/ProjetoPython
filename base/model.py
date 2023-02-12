@@ -8,7 +8,7 @@ class Customer(BaseModel):
     phone: str
 
     @validator("name")
-    def normalizar_nome(cls, v: str):
+    def n_nome(cls, v: str):
         nomes = v.split(' ')
         nome_final=[]
         for nome in nomes:
