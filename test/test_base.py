@@ -1,6 +1,6 @@
 from base.database import SessionLocal, engine
 import base.table as table
-from sqlalchemy_utils import database_exists, drop_database, get_tables
+from sqlalchemy_utils import database_exists, drop_database, get_columns
 from sqlalchemy.orm.session import Session
 
 
@@ -23,12 +23,13 @@ class TestTables:
         if database_exists(engine.url):
             drop_database(engine.url)
         table.Base.metadata.create_all(engine)
+        self.tables = table.Base.metadata.tables.keys()
 
-    def test_tables(self):
-        tables = table.Base.metadata.tables.keys()
-        assert 'customer' in tables 
-
-    def test_type_columns_customer(self):
+    def test_customer_table(self):
+        assert 'customer' in self.tables
+        assert len(get_columns(table.Customer)) == 4
         assert isinstance(table.Customer.id.type, table.Integer)
+        assert isinstance(table.Customer.name.type, table.String)
+        assert isinstance(table.Customer.cpf.type, table.String)
+        assert isinstance(table.Customer.phone.type, table.String)
 
- 
